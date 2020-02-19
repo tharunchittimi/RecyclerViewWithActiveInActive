@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">RecyclerViewWithActiveInActive</string>
+    <string name="accept">accept</string>
+    <string name="reject">Reject</string>
+    <string name="rejected">Rejected</string>
+    <string name="accepted">Accepted</string>
+</resources>
