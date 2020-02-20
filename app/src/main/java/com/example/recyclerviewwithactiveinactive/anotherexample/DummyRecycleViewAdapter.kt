@@ -1,5 +1,6 @@
 package com.example.recyclerviewwithactiveinactive.anotherexample
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.recyclerviewwithactiveinactive.R
 import com.example.recyclerviewwithactiveinactive.application.MyApplication
 
-class DummyRecycleViewAdapter(private val dummyRecycleViewModel: ArrayList<DummyRecycleViewModel>) :
+class DummyRecycleViewAdapter(private val dummyRecycleViewModel: ArrayList<DummyRecycleViewModel>,var context: Context) :
     RecyclerView.Adapter<DummyRecycleViewAdapter.DummyRecycleViewHolder>() {
     private var count=0
     private var bindingCount=0
@@ -48,6 +49,7 @@ class DummyRecycleViewAdapter(private val dummyRecycleViewModel: ArrayList<Dummy
                     ContextCompat.getColorStateList(MyApplication.getApplicationContext(), R.color.green)
                 holder.textReq.visibility=View.VISIBLE
                 holder.textReq.text="Accepted"
+
             }
             false->{
                 holder.rejectButton.backgroundTintList =
@@ -58,11 +60,9 @@ class DummyRecycleViewAdapter(private val dummyRecycleViewModel: ArrayList<Dummy
                     ContextCompat.getColorStateList(MyApplication.getApplicationContext(), R.color.red)
                 holder.textReq.visibility=View.VISIBLE
                 holder.textReq.text="Rejected"
+
             }
         }
-
-        val currentPosition:Int=position
-        val infoData= dummyRecycleViewModel[position]
 
         holder.acceptButton.setOnClickListener {
             if (dummyRecycleViewModel[position].isChecked!=true){
@@ -85,6 +85,12 @@ class DummyRecycleViewAdapter(private val dummyRecycleViewModel: ArrayList<Dummy
 
         bindingCount++
         Log.d("testing","onBindViewHolder$bindingCount")
+
+        holder.itemView.setOnLongClickListener {
+          val  dismissRvPosition = context as DismissRvPosition
+            dismissRvPosition.dismissRvPositionIn(position)
+            return@setOnLongClickListener true
+        }
     }
 
     class DummyRecycleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -93,9 +99,15 @@ class DummyRecycleViewAdapter(private val dummyRecycleViewModel: ArrayList<Dummy
         val rejectButton: Button = itemView.findViewById(R.id.dummyRejectBtn)
         val textReq: TextView = itemView.findViewById(R.id.dummyRequestText)
     }
+
+    interface DismissRvPosition{
+        fun dismissRvPositionIn(pos: Int)
+    }
+
     fun dismissRvPosition(pos: Int) {
         dummyRecycleViewModel.removeAt(pos)
-        this.notifyItemRemoved(pos)
+        notifyItemRemoved(pos)
+        notifyItemRangeChanged(pos, dummyRecycleViewModel.size)
     }
 
 }

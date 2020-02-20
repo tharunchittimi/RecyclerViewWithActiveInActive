@@ -11,7 +11,13 @@ import com.example.recyclerviewwithactiveinactive.anotherexample.swipe.SwipeCard
 import com.google.android.material.snackbar.Snackbar
 
 
-class DummyRecycleViewClass:BaseActivity() {
+class DummyRecycleViewClass:BaseActivity(),DummyRecycleViewAdapter.DismissRvPosition {
+
+    override fun dismissRvPositionIn(pos: Int) {
+        dummyRecycleViewModel?.removeAt(pos)
+        dummyRecycleViewAdapter?.notifyItemRemoved(pos)
+        dummyRecycleViewAdapter?.notifyItemRangeChanged(pos, dummyRecycleViewModel!!.size)
+    }
 
     private var dummyRecycleViewModel: ArrayList<DummyRecycleViewModel>? = null
     private var dummyRecycleViewAdapter: DummyRecycleViewAdapter? = null
@@ -26,7 +32,7 @@ class DummyRecycleViewClass:BaseActivity() {
         }
 
         dummyRvCard.layoutManager = LinearLayoutManager(this)
-        dummyRecycleViewAdapter = DummyRecycleViewAdapter(dummyRecycleViewModel?: ArrayList())
+        dummyRecycleViewAdapter = DummyRecycleViewAdapter(dummyRecycleViewModel?: ArrayList(),this)
         dummyRvCard.adapter = dummyRecycleViewAdapter
 
         val callback = SwipeCard(dummyRecycleViewAdapter!!)
@@ -36,7 +42,7 @@ class DummyRecycleViewClass:BaseActivity() {
 
     private fun setList() {
         dummyRecycleViewModel= ArrayList()
-        for (i in 0..10){
+        for (i in 0..15){
             dummyRecycleViewModel?.add(DummyRecycleViewModel())
         }
     }

@@ -24,7 +24,7 @@ class SwipeCard : ItemTouchHelper.SimpleCallback {
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        dummyRecycleViewAdapter.dismissRvPosition(viewHolder.adapterPosition)
-        Toast.makeText(MyApplication.getApplicationContext(),"removed at : ${viewHolder.adapterPosition}",Toast.LENGTH_LONG).show()
+        dummyRecycleViewAdapter.dismissRvPosition(viewHolder.layoutPosition)
+        Toast.makeText(MyApplication.getApplicationContext(),"removed at : ${viewHolder.layoutPosition}",Toast.LENGTH_LONG).show()
     }
 }
