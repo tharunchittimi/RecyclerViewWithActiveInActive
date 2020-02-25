@@ -20,14 +20,13 @@ class DummyRecycleViewClass:BaseActivity(),DummyRecycleViewAdapter.DismissRvPosi
         alertDialog.setIcon(R.drawable.ic_add_alert)
             .setTitle("Are you sure want to Delete!")
             .setPositiveButton("Delete") { dialogInterface: DialogInterface, i: Int ->
-                val  position =pos
                 val item = dummyRecycleViewAdapter!!.getData().get(pos)
                 dummyRecycleViewModel?.removeAt(pos)
                 dummyRecycleViewAdapter?.notifyItemRemoved(pos)
                 dummyRecycleViewAdapter?.notifyItemRangeChanged(pos, dummyRecycleViewModel!!.size)
 
                 Toast.makeText(this,"removed at : $pos",Toast.LENGTH_LONG).show()
-                showSnackBar(position,item)
+                showSnackBar(pos,item)
             }
             .setNegativeButton("Cancel")  {dialogInterface: DialogInterface, i: Int-> }
             .show()
