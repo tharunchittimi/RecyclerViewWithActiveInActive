@@ -13,13 +13,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.recyclerviewwithactiveinactive.R
 import com.example.recyclerviewwithactiveinactive.application.MyApplication
 
+
 class DummyRecycleViewAdapter(private val dummyRecycleViewModel: ArrayList<DummyRecycleViewModel>,var context: Context) :
     RecyclerView.Adapter<DummyRecycleViewAdapter.DummyRecycleViewHolder>() {
     private var count=0
     private var bindingCount=0
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DummyRecycleViewHolder {
         val view: View =
-            LayoutInflater.from(parent.context).inflate(R.layout.dummy_card_rv, parent, false)
+            LayoutInflater.from(parent.context).inflate(com.example.recyclerviewwithactiveinactive.R.layout.dummy_card_rv, parent, false)
         count++
         Log.d("testing","onCreateViewHolder$count")
         return DummyRecycleViewHolder(view)
@@ -110,4 +111,13 @@ class DummyRecycleViewAdapter(private val dummyRecycleViewModel: ArrayList<Dummy
         notifyItemRangeChanged(pos, dummyRecycleViewModel.size)
     }
 
+    fun restoreRvPosition(pos: Int,item:DummyRecycleViewModel){
+        dummyRecycleViewModel.add(pos,item)
+        notifyItemInserted(pos)
+        notifyItemRangeChanged(pos, dummyRecycleViewModel.size)
+    }
+
+    fun getData(): ArrayList<DummyRecycleViewModel> {
+        return dummyRecycleViewModel
+    }
 }
