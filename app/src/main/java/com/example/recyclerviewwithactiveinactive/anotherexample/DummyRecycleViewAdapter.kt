@@ -1,12 +1,14 @@
 package com.example.recyclerviewwithactiveinactive.anotherexample
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -89,7 +91,7 @@ class DummyRecycleViewAdapter(private val dummyRecycleViewModel: ArrayList<Dummy
 
         holder.itemView.setOnLongClickListener {
           val  dismissRvPosition = context as DismissRvPosition
-            dismissRvPosition.dismissRvPositionIn(position)
+            dismissRvPosition.dismissRvPositionIn(position, dummyRecycleViewModel[position].id)
             return@setOnLongClickListener true
         }
     }
@@ -102,7 +104,15 @@ class DummyRecycleViewAdapter(private val dummyRecycleViewModel: ArrayList<Dummy
     }
 
     interface DismissRvPosition{
-        fun dismissRvPositionIn(pos: Int)
+        fun dismissRvPositionIn(pos: Int, id: Int?)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun modifyDentalCareItem(data : DummyRecycleViewModel) {
+        dummyRecycleViewModel.removeIf { it.id == data.id }
+        dummyRecycleViewModel.add(0, data)
+        notifyItemMoved(data.id ?:0, 0)
+        notifyItemRangeChanged(0, dummyRecycleViewModel.size)
     }
 
     fun dismissRvPosition(pos: Int) {

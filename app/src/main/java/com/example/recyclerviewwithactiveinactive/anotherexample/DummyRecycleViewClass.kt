@@ -2,8 +2,10 @@ package com.example.recyclerviewwithactiveinactive.anotherexample
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recyclerviewwithactiveinactive.R
@@ -15,7 +17,10 @@ import kotlinx.android.synthetic.main.activity_dummy_recycleview_class.*
 
 class DummyRecycleViewClass:BaseActivity(),DummyRecycleViewAdapter.DismissRvPosition {
 
-    override fun dismissRvPositionIn(pos: Int) {
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun dismissRvPositionIn(pos: Int, id: Int?) {
+//        dummyRecycleViewAdapter?.modifyDentalCareItem(DummyRecycleViewModel(3))
+//        Toast.makeText(this,"replaced: $id",Toast.LENGTH_LONG).show()
         val alertDialog=AlertDialog.Builder(this)
         alertDialog.setIcon(R.drawable.ic_add_alert)
             .setTitle("Are you sure want to Delete!")
@@ -24,8 +29,9 @@ class DummyRecycleViewClass:BaseActivity(),DummyRecycleViewAdapter.DismissRvPosi
                 dummyRecycleViewModel?.removeAt(pos)
                 dummyRecycleViewAdapter?.notifyItemRemoved(pos)
                 dummyRecycleViewAdapter?.notifyItemRangeChanged(pos, dummyRecycleViewModel!!.size)
+                dummyRecycleViewAdapter?.notifyDataSetChanged()
 
-                Toast.makeText(this,"removed at : $pos",Toast.LENGTH_LONG).show()
+                Toast.makeText(this,"id at : $id",Toast.LENGTH_LONG).show()
                 showSnackBar(pos,item)
             }
             .setNegativeButton("Cancel")  {dialogInterface: DialogInterface, i: Int-> }
@@ -65,9 +71,11 @@ class DummyRecycleViewClass:BaseActivity(),DummyRecycleViewAdapter.DismissRvPosi
     }
 
     private fun setList() {
+        var count = 0
         dummyRecycleViewModel= ArrayList()
         for (i in 0..15){
-            dummyRecycleViewModel?.add(DummyRecycleViewModel())
+            count++
+            dummyRecycleViewModel?.add(DummyRecycleViewModel(count))
         }
     }
 }
